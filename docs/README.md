@@ -1,5 +1,8 @@
 ﻿# AutoGlobalUsing
 
+[![it](https://img.shields.io/badge/Leggi_in_italiano!-red.svg)](https://github.com/Davidencho/AutoGlobalUsing/blob/master/docs/README.it.md)
+
+
 This small project automates the process of reorganizing `using` directives within C# projects (version 10 and above).
 
 The idea is simple: instead of having `using` directives scattered across various source files, the tool collects them into a single file, improving the readability and maintainability of the code.
