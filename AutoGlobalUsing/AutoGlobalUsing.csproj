@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
 	<Authors>Davide Caruso</Authors>
 	<Description>This is an AutoGlobalUsing!</Description>
-	<Version>1.0</Version>
+	<Version>1.1</Version>
 	<PackageLicense>Apache-2.0</PackageLicense>
   </PropertyGroup>
 
