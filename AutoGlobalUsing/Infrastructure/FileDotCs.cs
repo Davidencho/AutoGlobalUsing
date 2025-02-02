@@ -11,8 +11,8 @@
 
         internal async Task<IEnumerable<string>> CollectUsingAsync(bool globalizeAliasDirective)
         {
-            LinkedList<string> usingLines = [];
-            LinkedList<string> linesWithoutUsing = new();
+            List<string> usingLines = [];
+            List<string> linesWithoutUsing = [];
 
             bool lastLineWasAnUsingLine = false;
             await foreach (string line in ReadLinesAsync())
@@ -21,16 +21,18 @@
                     && (line.StartsWith("using") || line.StartsWith("global using"))
                     && line.EndsWith(';')
                     && !line.Contains(" static ")
+                    && !line.Contains('(')
+                    && !line.Contains(')')
                     && (globalizeAliasDirective || !line.Contains('='))
                 )
                 {
-                    usingLines.AddLast(line);
+                    usingLines.Add(line);
                     lastLineWasAnUsingLine = true;
                 }
                 else if (lastLineWasAnUsingLine && string.IsNullOrWhiteSpace(line)) // Remove empty lines beewteen using and namespace
                     lastLineWasAnUsingLine = false;
                 else
-                    linesWithoutUsing.AddLast(line);
+                    linesWithoutUsing.Add(line);
             }
             await WriteLinesAsync(linesWithoutUsing);
             return usingLines;

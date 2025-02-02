@@ -4,8 +4,13 @@
     {
         internal static async Task WriteLinesAsync(this StreamWriter streamWriter, IEnumerable<string> lines, bool closeStream = true)
         {
-            foreach (string line in lines)
-                await streamWriter.WriteLineAsync(line);
+            if (lines.Any())
+            {
+                foreach (string line in lines.SkipLast(1))
+                    await streamWriter.WriteLineAsync(line);
+
+                await streamWriter.WriteAsync(lines.Last());
+            }
             
             if (closeStream)
                 streamWriter.Close();
