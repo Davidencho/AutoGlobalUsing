@@ -5,6 +5,7 @@
         private readonly string _fileNameResult;
         private readonly string _fileExistsRegex;
         private readonly bool _globalizeAliasDirective;
+        private readonly bool _trailingNewline;
         private readonly DirectoryInfo _directoryInfo;
         private static readonly char directorySeparator = Path.DirectorySeparatorChar;
         private readonly bool _verbose;
@@ -22,6 +23,10 @@
 
             _fileExistsRegex = configuration["FileExistsRegex"] ?? throw new InvalidDataException(AutoGlobalUsingErrors.MissedFileExistsRegex);
             _ = bool.TryParse(configuration["GlobalizeAliasDirective"], out _globalizeAliasDirective);
+            
+            if (!bool.TryParse(configuration["TrailingNewline"], out _trailingNewline))
+                _trailingNewline = true;
+
             _directoryInfo = new(directoryPath);
             _verbose = verbose;
         }
@@ -53,7 +58,7 @@
             foreach (string filePath in filePaths)
             {
                 FileDotCs file = new(filePath);
-                usingSet.UnionWith(await file.CollectUsingAsync(_globalizeAliasDirective));
+                usingSet.UnionWith(await file.CollectUsingAsync(_globalizeAliasDirective, _trailingNewline));
                 if (Regex.IsMatch(new FileInfo(filePath).Name, _fileExistsRegex))
                     file.Delete();
             }
@@ -63,11 +68,11 @@
                 string globalUsingPath = Path.Combine(directoryInfo.FullName, _fileNameResult);
                 FileDotCs globalUsingFile = new(globalUsingPath);
                 if (File.Exists(globalUsingPath))
-                    usingSet.UnionWith(await globalUsingFile.CollectUsingAsync(_globalizeAliasDirective));
+                    usingSet.UnionWith(await globalUsingFile.CollectUsingAsync(_globalizeAliasDirective, _trailingNewline));
 
                 IEnumerable<string> globalLines = usingSet.Select(x => x.StartsWith("global") ? x : $"global {x}");
 
-                await globalUsingFile.WriteLinesAsync(globalLines);
+                await globalUsingFile.WriteLinesAsync(globalLines, _trailingNewline);
 
                 if (_verbose)
                     foreach (string line in usingSet)
