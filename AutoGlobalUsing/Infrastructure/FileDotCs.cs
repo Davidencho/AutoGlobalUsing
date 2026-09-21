@@ -47,7 +47,7 @@ internal class FileDotCs
 
     internal async Task WriteLinesAsync(IEnumerable<string> lines, bool trailingNewline)
     {
-        StreamWriter streamWriter = new(_fileInfo.FullName, false, new UTF8Encoding(true));
+        StreamWriter streamWriter = new(_fileInfo.FullName, false, new UTF8Encoding(false));
 
         string[] arrayLines = lines.ToArray();
 

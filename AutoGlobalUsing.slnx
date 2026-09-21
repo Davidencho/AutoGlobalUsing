@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="AutoGlobalUsing/AutoGlobalUsing/AutoGlobalUsing.csproj" />
+  <Project Path="AutoGlobalUsing/AutoGlobalUsing.csproj" />
+  <Project Path="AutoGlobalUsing.Tests/AutoGlobalUsing.Tests.csproj" />
 </Solution>
